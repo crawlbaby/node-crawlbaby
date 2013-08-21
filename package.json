@@ -1,0 +1,23 @@
+{
+  "name": "node-crawl-baby",
+  "version": "0.0.1",
+  "main": "index",
+  "dependencies": {
+    "coffee-script": "1.6.3",
+    "async": "0.2.9",
+    "underscore": "1.5.1",
+    "request": "2.26.0",
+    "cheerio": "0.12.1",
+    "node-uuid": "1.4.0"
+  },
+  "devDependencies": {
+    "should": "1.2.2",
+    "mocha": "1.12.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha --compilers coffee:coffee-script --globals lw --recursive ./test -t 100000"
+  }
+}
