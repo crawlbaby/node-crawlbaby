@@ -69,7 +69,7 @@ crawlFields = (parentTag, fields, callback) ->
         (err, results) ->
           return callback err  if err?
 
-          if results.length is 1 and typeof results[0] is 'string'
+          if results.length is 1
             callback null, results[0]
           else
             callback null, results
