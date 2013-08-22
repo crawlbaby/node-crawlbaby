@@ -18,6 +18,6 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script --globals lw --recursive ./test -t 100000"
+    "test": "mocha --compilers coffee:coffee-script --globals lw --recursive ./test -t 0"
   }
 }
