@@ -18,24 +18,25 @@ class Crawler
             page.loadUrl category.entryUrl, (err) ->
               return callback err  if err?
 
-              crawlFields page.$.root(), category.fields, callback
+              crawlFields page, page.$.root(), category.fields, callback
         ,
           callback
     ,
       callback 
 
 
-crawlNextPage = (parentTag, fields, nextPageSelector, resultsArray, callback) ->
-  console.log "crawlNextPage started."
-  console.log fields
-  crawlFields parentTag, fields, (err, results) ->
+crawlNextPage = (page, parentTag, fields, nextPageSelector, resultsMap, callback) ->
+  crawlFields page, parentTag, fields, (err, results) ->
     return callback err  if err?
 
-    for result in results
-      resultsArray.push result
+    for k, v of results
+      resultsMap[k] = []  if not resultsMap[k]?
+
+      for item in v
+        resultsMap[k].push item
 
     nextPageTags = parentTag.find(nextPageSelector)
-    return callback null, resultsArray  if nextPageTags.length is 0
+    return callback null, resultsMap  if nextPageTags.length is 0
 
     nextPageTag = nextPageTags.eq(0)
     nextPageUrl = nextPageTag.attr('href')
@@ -43,24 +44,26 @@ crawlNextPage = (parentTag, fields, nextPageSelector, resultsArray, callback) ->
     nextPage = new Page()
     nextPage.loadUrl nextPageUrl, (err) ->
       return callback err  if err?
-      crawlNextPage nextPage.$.root(), fields, nextPageSelector, resultsArray, callback
+      crawlNextPage nextPage, nextPage.$.root(), fields, nextPageSelector, resultsMap, callback
 
 
-crawlFields = (parentTag, fields, callback) ->
-  console.log "crawlFields started."
-  console.log fields
+crawlFields = (page, parentTag, fields, callback) ->
   fieldKeys = _.keys fields
 
   async.map fieldKeys
   ,
     (fieldKey, callback) ->
       field = fields[fieldKey]
-      console.log "field: #{JSON.stringify field}"
       tags = parentTag.find(field.selector)
-      console.log "tags: #{JSON.stringify tags}"
 
-      if tags.length is 0
-        return callback null, null
+      if tags.length is 0 or not tags?
+        switch field.type
+          when 'nextPage'
+            return crawlNextPage page, parentTag, field.fields, field.selector, {}, callback
+          when 'url'
+            return callback null, page.url
+          else
+            return callback null, null
 
       async.map [0...tags.length]
       ,
@@ -69,9 +72,7 @@ crawlFields = (parentTag, fields, callback) ->
 
           switch field.type
             when 'nextPage'
-              console.log "crawlNextPage parentTag, field.fields, field.selector, [], callback"
-              console.log "crawlNextPage #{parentTag}, #{field.fields}, #{field.selector}"
-              crawlNextPage parentTag, field.fields, field.selector, [], callback
+              crawlNextPage page,parentTag, field.fields, field.selector, {}, callback
 
             when 'page'
               newPageUrl = tag.attr('href')
@@ -79,10 +80,10 @@ crawlFields = (parentTag, fields, callback) ->
               newPage = new Page()
               newPage.loadUrl newPageUrl, (err) ->
                 return callback err  if err?                
-                crawlFields newPage.$.root(), field.fields, callback
+                crawlFields newPage, newPage.$.root(), field.fields, callback
 
             when 'tag'
-              crawlFields tag, field.fields, callback
+              crawlFields page, tag, field.fields, callback
             when 'text'
               callback null, tag.text()
             when 'class'
@@ -93,7 +94,7 @@ crawlFields = (parentTag, fields, callback) ->
         (err, results) ->
           return callback err  if err?
 
-          if results.length is 1
+          if results.length is 1 and typeof results[0] is 'string'
             callback null, results[0]
           else
             callback null, results

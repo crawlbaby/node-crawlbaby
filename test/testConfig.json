@@ -6,92 +6,108 @@
       "categories": [
         {
           "name": "baby",
-          "entryUrl": "http://m.target.com/c/stroller-accessories-strollers-baby/-/N-5xtk1",
+          "entryUrl": "http://m.target.com/c/harness-booster-car-seats-baby/-/N-5q0ew",
 
           "fields": {
-            "items": {
+            "itemPage": {
               "selector": ".next-link a",
-              "type": "nextPage"
-            },
+              "type": "nextPage",
 
-            "fields": {
-              "item": {
-                "selector": ".products a.article-link",
-                "type": "page",
+              "fields": {
+                "items": {
+                  "selector": ".products a.article-link",
+                  "type": "page",
 
-                "fields": {
-                  "title": {
-                    "selector": ".priceBlock h2",
-                    "type": "text"
-                  },
-                  "price": {
-                    "selector": "#pdpPriceSpan",
-                    "type": "text"
-                  },
+                  "fields": {
+                    "pageUrl": {
+                      "type": "url"
+                    },
+                    "title": {
+                      "selector": ".priceBlock h2",
+                      "type": "text"
+                    },
+                    "price": {
+                      "selector": "#pdpPriceSpan",
+                      "type": "text"
+                    },
 
-                  "detailPages": {
-                    "selector": ".disclaimer a",
-                    "type": "page",
+                    "detailPages": {
+                      "selector": ".disclaimer a",
+                      "type": "page",
 
-                    "fields": {
-                      "categories": {
-                        "selector": ".breadcrumbsArea #breadcrumbs span a",
-                        "type": "text"
+                      "fields": {
+                        "categories": {
+                          "selector": ".breadcrumbsArea #breadcrumbs span a",
+                          "type": "text"
+                        }
                       }
-                    }
-                  },
+                    },
 
-                  "reviewPages": {
-                    "selector": ".ratings-reviews",
-                    "type": "page",
+                    "review": {
+                      "selector": ".ratings-reviews",
+                      "type": "page",
 
-                    "fields": {
-                      "reviews": {
-                        "selector": ".reviews article",
-                        "type": "tag",
+                      "fields": {
+                        "reviewPage": {
+                          "selector": ".next-link a",
+                          "type": "nextPage",
 
-                        "fields": {
-                          "title": {
-                            "selector": ".RRtitle",
-                            "type": "text"
-                          },
-                          "author": {
-                            "selector": "p.author",
-                            "type": "text"
-                          },
-                          "date": {
-                            "selector": ".review-date",
-                            "type": "date"
-                          },
-                          "rating": {
-                            "selector": ".ratings-reviews .rating",
-                            "type": "class"
-                          },
-                          "description": {
-                            "selector": ".desclamer4reviews",
-                            "type": "text"
-                          },
-                          "likeCount": {
-                            "selector": ".like .count",
-                            "type": "text"
-                          },
-                          "detailRatingTitles": {
-                            "selector": "#review-quality-ratings .author",
-                            "type": "text"
-                          },
-                          "detailRatingStars": {
-                            "selector": "#review-quality-ratings dd span",
-                            "type": "class"
+                          "fields": {
+                            "reviews": {
+                              "selector": ".reviews article",
+                              "type": "tag",
+
+                              "fields": {
+                                "pageUrl": {
+                                  "type": "url"
+                                },
+                                
+                                "title": {
+                                  "selector": ".RRtitle",
+                                  "type": "text"
+                                },
+                                "author": {
+                                  "selector": "p.author",
+                                  "type": "text"
+                                },
+                                "date": {
+                                  "selector": ".review-date",
+                                  "type": "date"
+                                },
+                                "rating": {
+                                  "selector": ".ratings-reviews .rating",
+                                  "type": "class"
+                                },
+                                "description": {
+                                  "selector": ".desclamer4reviews",
+                                  "type": "text"
+                                },
+                                "likeCount": {
+                                  "selector": ".like .count",
+                                  "type": "text"
+                                },
+                                "detailRatingTitles": {
+                                  "selector": "#review-quality-ratings .author",
+                                  "type": "text"
+                                },
+                                "detailRatingStars": {
+                                  "selector": "#review-quality-ratings dd span",
+                                  "type": "class"
+                                }
+
+                              }
+                            }
                           }
 
                         }
-                      }
 
+                      }
                     }
+
                   }
                 }
-              }
 
+              }
             }
           }
 

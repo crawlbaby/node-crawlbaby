@@ -9,7 +9,7 @@ class Page
     'Accept-Language': 'en-US,en;q=0.8'
     'Cache-Control': 'no-cache'
     'Connection': 'keep-alive'
-    # 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_1) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1'
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_1) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1'
 
 
   loadUrl: (@url, options, callback) ->
@@ -18,7 +18,8 @@ class Page
       options = {}
 
     options.url = url
-    options.header = @requestHeader  if not options.header?
+    options.headers = @requestHeader  if not options.headers?
+    options.timeout = 100000
 
     request options, (err, res, @body) =>
       return callback err  if err?
