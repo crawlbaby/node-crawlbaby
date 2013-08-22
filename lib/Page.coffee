@@ -4,12 +4,12 @@ cheerio = require 'cheerio'
 
 class Page
   requestHeader:
-    'Accept': 'text/html'
-    'Accept-Charset': 'UTF-8,*;q=0.5'
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.'
+    # 'Accept-Encoding': 'gzip,deflate,sdch'
     'Accept-Language': 'en-US,en;q=0.8'
-    'Cache-Control': 'max-age=0'
+    'Cache-Control': 'no-cache'
     'Connection': 'keep-alive'
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_1) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1'
+    # 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_1) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1'
 
 
   loadUrl: (@url, options, callback) ->
