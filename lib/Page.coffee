@@ -3,8 +3,8 @@ cheerio = require 'cheerio'
 
 
 class Page
-  requestHeaders:
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.'
+  httpHeaders:
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
     # 'Accept-Encoding': 'gzip,deflate,sdch'
     'Accept-Language': 'en-US,en;q=0.8'
     'Cache-Control': 'no-cache'
@@ -18,7 +18,7 @@ class Page
       options = {}
 
     options.url = url
-    options.headers = @requestHeaders  if not options.headers?
+    options.headers = @httpHeaders  if not options.headers?
     options.timeout = 100000
 
     request options, (err, res, @body) =>

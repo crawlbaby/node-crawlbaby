@@ -9,8 +9,12 @@ class Crawler
   constructor: (@config) ->
     null
 
+
   crawlCategory: (categoryConfig, callback) ->
     page = new Page()
+
+    page.httpHeaders = @httpHeaders  if @httpHeaders?
+
     page.loadUrl categoryConfig.entryUrl, (err) =>
       return callback err  if err?
       
@@ -38,6 +42,8 @@ class Crawler
 
 
   crawl: (callback) ->
+    @httpHeaders = @config.httpHeaders  if @config.httpHeaders?
+
     siteKeys = _.keys @config.sites
 
     async.map siteKeys
@@ -73,14 +79,21 @@ crawlNextPage = (page, parentTag, fields, nextPageSelector, resultsMap, callback
     return callback null, resultsMap  if not nextPageTags? or nextPageTags.length is 0
 
     nextPageTag = nextPageTags.eq(0)
+    return callback null, null  if not nextPageTag.attr('href')
+
     nextPageUrl = nextPageTag.attr('href')
     if nextPageUrl.indexOf('http') isnt 0
       nextPageUrl = urlModule.resolve page.url, nextPageUrl
+    
     console.log nextPageUrl
     nextPage = new Page()
+    
+    nextPage.httpHeaders = page.httpHeaders
+
     nextPage.loadUrl nextPageUrl, (err) ->
       return callback err  if err?
       crawlNextPage nextPage, nextPage.$.root(), fields, nextPageSelector, resultsMap, callback
+
 
 
 crawlFields = (page, parentTag, fields, callback) ->
@@ -91,6 +104,7 @@ crawlFields = (page, parentTag, fields, callback) ->
     (fieldKey, callback) ->
       field = fields[fieldKey]
       tags = parentTag.find(field.selector)
+      tags = tags.eq(field.eq)  if field.eq?
 
       if not tags? or tags.length is 0
         switch field.type
@@ -111,12 +125,17 @@ crawlFields = (page, parentTag, fields, callback) ->
               crawlNextPage page,parentTag, field.fields, field.selector, {}, callback
 
             when 'page'
-              console.log tag
+              return callback null, null  if not tag.attr('href')?
+
               newPageUrl = tag.attr('href')
               if newPageUrl.indexOf('http') isnt 0
                 newPageUrl = urlModule.resolve page.url, newPageUrl
+              
               console.log newPageUrl
               newPage = new Page()
+
+              newPage.httpHeaders = page.httpHeaders
+
               newPage.loadUrl newPageUrl, (err) ->
                 return callback err  if err?                
                 crawlFields newPage, newPage.$.root(), field.fields, callback
@@ -124,7 +143,13 @@ crawlFields = (page, parentTag, fields, callback) ->
             when 'tag'
               crawlFields page, tag, field.fields, callback
             when 'text'
-              callback null, tag.text()
+              text = tag.text()
+              if field.removeText?
+                re = new RegExp field.removeText.pattern, field.removeText.flags
+                text = text.replace re, ''
+              callback null, text
+            when 'link'
+              callback null, tag.attr('href')
             when 'class'
               callback null, tag.attr('class')
             else
