@@ -1,7 +1,9 @@
 _ = require 'underscore'
 async = require 'async'
+urlModule = require 'url'
 
 Page = require './Page'
+
 
 class Crawler
   constructor: (@config) ->
@@ -72,6 +74,8 @@ crawlNextPage = (page, parentTag, fields, nextPageSelector, resultsMap, callback
 
     nextPageTag = nextPageTags.eq(0)
     nextPageUrl = nextPageTag.attr('href')
+    if nextPageUrl.indexOf('http') isnt 0
+      nextPageUrl = urlModule.resolve page.url, nextPageUrl
     console.log nextPageUrl
     nextPage = new Page()
     nextPage.loadUrl nextPageUrl, (err) ->
@@ -107,7 +111,10 @@ crawlFields = (page, parentTag, fields, callback) ->
               crawlNextPage page,parentTag, field.fields, field.selector, {}, callback
 
             when 'page'
+              console.log tag
               newPageUrl = tag.attr('href')
+              if newPageUrl.indexOf('http') isnt 0
+                newPageUrl = urlModule.resolve page.url, newPageUrl
               console.log newPageUrl
               newPage = new Page()
               newPage.loadUrl newPageUrl, (err) ->

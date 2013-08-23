@@ -1,0 +1,63 @@
+{
+  "sites": {
+    "Amazon": {
+
+      "categories": {
+        "Diapering": {
+          "entryUrl": "http://www.amazon.com/gp/aw/ri/top/baby-products/166764011/ref=aa_ri_re_baby-products_pa_top_4",
+
+          "fields": {
+            "items": {
+              "selector": ".productList .productTitle a",
+              "type": "page",
+
+              "fields": {
+                "pageUrl": {
+                  "type": "url"
+                },
+                "title": {
+                  "selector": "#product-title",
+                  "type": "text"
+                },
+                "price": {
+                  "selector": "#prices .a-color-price.a-size-medium",
+                  "type": "text"
+                },
+
+                "reviewPage": {
+                  "selector": "#rating-stars a",
+                  "type": "page",
+
+                  "fields": {
+                    "reviews": {
+                      "selector": "#reviews-list .review",
+                      "type": "tag",
+
+                      "fields": {
+                        "pageUrl": {
+                          "type": "url"
+                        },
+                        
+                        "title": {
+                          "selector": "h4",
+                          "type": "text"
+                        },
+                        "author": {
+                          "selector": "span.a-color-secondary.a-size-small.a-spacing-mini",
+                          "type": "text"
+                        }
+                      }
+                    }
+
+                  }
+                }
+
+              }
+            }
+          }
+
+        }
+      }
+    }
+  }
+}
