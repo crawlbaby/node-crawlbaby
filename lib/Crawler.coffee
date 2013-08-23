@@ -7,22 +7,53 @@ class Crawler
   constructor: (@config) ->
     null
 
-  crawl: (callback) ->
-    async.map @config.sites
-    ,
-      (site, callback) ->
-        async.map site.categories
-        ,
-          (category, callback) ->
-            page = new Page()
-            page.loadUrl category.entryUrl, (err) ->
-              return callback err  if err?
+  crawlCategory: (categoryConfig, callback) ->
+    page = new Page()
+    page.loadUrl categoryConfig.entryUrl, (err) =>
+      return callback err  if err?
+      
+      crawlFields page, page.$.root(), categoryConfig.fields, callback
 
-              crawlFields page, page.$.root(), category.fields, callback
-        ,
-          callback
+
+  crawlSite: (siteConfig, callback) ->
+    categoryKeys = _.keys siteConfig.categories
+
+    async.map categoryKeys
     ,
-      callback 
+      (categoryKey, callback) =>
+        categoryConfig = siteConfig.categories[categoryKey]
+
+        @crawlCategory categoryConfig, callback
+    ,
+      (err, results) ->
+        return callback err  if err?
+
+        resultMap = {}
+        for result, index in results
+          resultMap[categoryKeys[index]] = result
+
+        callback null, resultMap
+
+
+  crawl: (callback) ->
+    siteKeys = _.keys @config.sites
+
+    async.map siteKeys
+    ,
+      (siteKey, callback) =>
+        siteConfig = @config.sites[siteKey]
+
+        @crawlSite siteConfig, callback
+    ,
+      (err, results) ->
+        return callback err  if err?
+
+        resultMap = {}
+        for result, index in results
+          resultMap[siteKeys[index]] = result
+          
+        callback null, resultMap
+
 
 
 crawlNextPage = (page, parentTag, fields, nextPageSelector, resultsMap, callback) ->
@@ -32,11 +63,12 @@ crawlNextPage = (page, parentTag, fields, nextPageSelector, resultsMap, callback
     for k, v of results
       resultsMap[k] = []  if not resultsMap[k]?
 
-      for item in v
-        resultsMap[k].push item
+      if v?
+        for item in v
+          resultsMap[k].push item
 
     nextPageTags = parentTag.find(nextPageSelector)
-    return callback null, resultsMap  if nextPageTags.length is 0
+    return callback null, resultsMap  if not nextPageTags? or nextPageTags.length is 0
 
     nextPageTag = nextPageTags.eq(0)
     nextPageUrl = nextPageTag.attr('href')
@@ -56,7 +88,7 @@ crawlFields = (page, parentTag, fields, callback) ->
       field = fields[fieldKey]
       tags = parentTag.find(field.selector)
 
-      if tags.length is 0 or not tags?
+      if not tags? or tags.length is 0
         switch field.type
           when 'nextPage'
             return crawlNextPage page, parentTag, field.fields, field.selector, {}, callback
@@ -94,7 +126,9 @@ crawlFields = (page, parentTag, fields, callback) ->
         (err, results) ->
           return callback err  if err?
 
-          if results.length is 1 and typeof results[0] is 'string'
+          if not results?
+            callback null, null
+          else if Array.isArray(results) and results.length is 1
             callback null, results[0]
           else
             callback null, results

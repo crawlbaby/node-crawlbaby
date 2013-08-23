@@ -1,15 +1,13 @@
 {
-  "sites": [
-    {
-      "name": "target",
+  "sites": {
+    "Target": {
 
-      "categories": [
-        {
-          "name": "baby",
-          "entryUrl": "http://m.target.com/c/harness-booster-car-seats-baby/-/N-5q0ew",
+      "categories": {
+        "baby": {
+          "entryUrl": "http://m.target.com/mobile/c/travel-systems-strollers-baby/-/N-5xtjw",
 
           "fields": {
-            "itemPage": {
+            "itemAllPages": {
               "selector": ".next-link a",
               "type": "nextPage",
 
@@ -31,7 +29,7 @@
                       "type": "text"
                     },
 
-                    "detailPages": {
+                    "itemDetailPage": {
                       "selector": ".disclaimer a",
                       "type": "page",
 
@@ -43,12 +41,12 @@
                       }
                     },
 
-                    "review": {
+                    "reviewPage": {
                       "selector": ".ratings-reviews",
                       "type": "page",
 
                       "fields": {
-                        "reviewPage": {
+                        "reivewAllPages": {
                           "selector": ".next-link a",
                           "type": "nextPage",
 
@@ -112,7 +110,7 @@
           }
 
         }
-      ]
+      }
     }
-  ]
+  }
 }
