@@ -64,7 +64,7 @@ class Crawler
 
 
 
-crawlNextPage = (page, parentTag, fields, nextPageSelector, resultsMap, callback) ->
+crawlNextPage = (page, parentTag, fields, nextPageSelector, eqNo, resultsMap, callback) ->
   crawlFields page, parentTag, fields, (err, results) ->
     return callback err  if err?
 
@@ -75,11 +75,17 @@ crawlNextPage = (page, parentTag, fields, nextPageSelector, resultsMap, callback
         for item in v
           resultsMap[k].push item
 
-    nextPageTags = parentTag.find(nextPageSelector)
+    nextPageTags = parentTag.find(nextPageSelector).eq(eqNo)
     return callback null, resultsMap  if not nextPageTags? or nextPageTags.length is 0
 
-    nextPageTag = nextPageTags.eq(0)
-    return callback null, null  if not nextPageTag.attr('href')
+    nextPageTag = nextPageTags
+
+    if nextPageTags['0'].type is 'tag' and nextPageTags['0'].name isnt 'a'
+      nextPageTags = nextPageTags.find('a')
+      return callback null, resultsMap  if not nextPageTags? or nextPageTags.length is 0
+      nextPageTag = nextPageTags.eq(0)
+
+    return callback null, resultsMap  if not nextPageTag.attr('href')
 
     nextPageUrl = nextPageTag.attr('href')
     if nextPageUrl.indexOf('http') isnt 0
@@ -92,7 +98,7 @@ crawlNextPage = (page, parentTag, fields, nextPageSelector, resultsMap, callback
 
     nextPage.loadUrl nextPageUrl, (err) ->
       return callback err  if err?
-      crawlNextPage nextPage, nextPage.$.root(), fields, nextPageSelector, resultsMap, callback
+      crawlNextPage nextPage, nextPage.$.root(), fields, nextPageSelector, eqNo, resultsMap, callback
 
 
 
@@ -105,11 +111,15 @@ crawlFields = (page, parentTag, fields, callback) ->
       field = fields[fieldKey]
       tags = parentTag.find(field.selector)
       tags = tags.eq(field.eq)  if field.eq?
+      if field.eq?
+        eqNo = field.eq
+      else
+        eqNo = 0
 
       if not tags? or tags.length is 0
         switch field.type
           when 'nextPage'
-            return crawlNextPage page, parentTag, field.fields, field.selector, {}, callback
+            return crawlNextPage page, parentTag, field.fields, field.selector, eqNo, {}, callback
           when 'url'
             return callback null, page.url
           else
@@ -122,7 +132,7 @@ crawlFields = (page, parentTag, fields, callback) ->
 
           switch field.type
             when 'nextPage'
-              crawlNextPage page,parentTag, field.fields, field.selector, {}, callback
+              crawlNextPage page, parentTag, field.fields, field.selector, eqNo, {}, callback
 
             when 'page'
               return callback null, null  if not tag.attr('href')?
@@ -152,6 +162,8 @@ crawlFields = (page, parentTag, fields, callback) ->
               callback null, tag.attr('href')
             when 'class'
               callback null, tag.attr('class')
+            when 'image'
+              callback null, tag.attr('src')
             else
               callback null, tag.text()
       ,
