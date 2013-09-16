@@ -1,6 +1,6 @@
 {
   "name": "node-crawl-baby",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "index",
   "readmeFilename": "README.md",
   "description": "A node.js module to crawl data which only you want from a website.",
