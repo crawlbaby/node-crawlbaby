@@ -12,7 +12,7 @@
 
       "categories": {
         "baby": {
-          "entryUrl": "http://m.target.com/mobile/c/travel-systems-strollers-baby/-/N-5xtjw",
+          "entryUrl": "http://m.target.com/mobile/c/disposable-diapers-diapering-baby/-/N-5xtlb?type=products",
 
           "fields": {
             "itemAllPages": {
@@ -35,6 +35,10 @@
                     "price": {
                       "selector": "#pdpPriceSpan",
                       "type": "text"
+                    },
+                    "imageUrl": {
+                      "selector": "#product-images .product-img img",
+                      "type": "image"
                     },
 
                     "itemDetailPage": {
