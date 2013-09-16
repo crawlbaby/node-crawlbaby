@@ -1,0 +1,113 @@
+{
+  "httpHeaders": {
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.8",
+    "Cache-Control": "no-cache",
+    "Connection": "keep-alive",
+    "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3"
+  },
+
+  "sites": {
+    "Amazon": {
+
+      "categories": {
+        "BabyCarriers": {
+          "entryUrl": "http://www.amazon.com/gp/aw/s/ref=is_r_p_89_4?rh=i%3Aaps%2Ck%3Ababy+carrier%2Cp_89%3AERGObaby&keywords=baby+carrier&ie=UTF8&qid=1379367179&rnid=2528832011",
+
+          "fields": {
+            "itemAllPages": {
+              "selector": "ul.a-pagination li",
+              "eq": 1,
+              "type": "nextPage",
+
+              "fields": {
+                "items": {
+                  "selector": ".sx-result-table .sx-table-item a",
+                  "type": "page",
+
+                  "fields": {
+                    "pageUrl": {
+                      "type": "url"
+                    },
+                    "title": {
+                      "selector": "#product-title",
+                      "type": "text",
+                      "removeText": {
+                        "pattern": "[\\n]",
+                        "flags": "g"
+                      }
+                    },
+                    "price": {
+                      "selector": "#prices .a-color-price.a-size-medium",
+                      "type": "text",
+                      "removeText": {
+                        "pattern": "[\\n$]",
+                        "flags": "g"
+                      }
+                    },
+
+                    "reviewPage": {
+                      "selector": "#rating-stars a",
+                      "type": "page",
+
+                      "fields": {
+                        "reivewAllPages": {
+                          "selector": "#aw-cr-show-more",
+                          "type": "nextPage",
+
+                          "fields": {
+                            "reviews": {
+                              "selector": "#reviews-list .review",
+                              "type": "tag",
+
+                              "fields": {
+                                "pageUrl": {
+                                  "type": "url"
+                                },
+                                
+                                "title": {
+                                  "selector": "h4",
+                                  "type": "text",
+                                  "removeText": {
+                                    "pattern": "[\\n]",
+                                    "flags": "g"
+                                  }
+                                },
+                                "author": {
+                                  "selector": "span.a-color-secondary.a-size-small.a-spacing-mini",
+                                  "type": "text",
+                                  "removeText": {
+                                    "pattern": "[\\n]",
+                                    "flags": "g"
+                                  }
+                                },
+
+                                "description": {
+                                  "selector": ".expander .expander-hidden",
+                                  "type": "text",
+                                  "removeText": {
+                                    "pattern": "[\\n]",
+                                    "flags": "g"
+                                  }
+                                }
+                              }
+                            }
+
+                          }
+                        }
+                      }
+
+                    }
+
+                  }
+                }
+              }
+
+            }
+          }
+
+        }
+      }
+    }
+  }
+}
