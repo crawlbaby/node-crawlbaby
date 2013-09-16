@@ -2,6 +2,15 @@
   "name": "node-crawl-baby",
   "version": "0.0.1",
   "main": "index",
+  "readmeFilename": "README.md",
+  "description": "A node.js module to crawl data which only you want from a website.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xissy/node-crawl-baby.git"
+  },
+  "bugs": {
+    "url": "https://github.com/xissy/node-crawl-baby/issues"
+  },
   "dependencies": {
     "coffee-script": "1.6.3",
     "async": "0.2.9",
