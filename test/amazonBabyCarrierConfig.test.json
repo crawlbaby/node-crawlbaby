@@ -26,7 +26,7 @@
                   "type": "page",
 
                   "fields": {
-                    "pageUrl": {
+                    "url": {
                       "type": "url"
                     },
                     "title": {
@@ -51,7 +51,7 @@
                       "type": "page",
 
                       "fields": {
-                        "reivewAllPages": {
+                        "reviewAllPages": {
                           "selector": "#aw-cr-show-more",
                           "type": "nextPage",
 
@@ -61,7 +61,7 @@
                               "type": "tag",
 
                               "fields": {
-                                "pageUrl": {
+                                "url": {
                                   "type": "url"
                                 },
 
@@ -85,6 +85,10 @@
                                     "pattern": "[\\n]",
                                     "flags": "g"
                                   }
+                                },
+                                "starCount": {
+                                  "selector": ".a-icon.a-icon-star-full",
+                                  "type": "count"
                                 },
 
                                 "description": {

@@ -121,6 +121,9 @@ crawlFields = (page, parentTag, fields, callback) ->
       else
         eqNo = 0
 
+      if field.type is 'count'
+        return callback null, tags.length
+
       if not tags? or tags.length is 0
         switch field.type
           when 'nextPage'
