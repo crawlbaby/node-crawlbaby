@@ -109,10 +109,15 @@ crawlFields = (page, parentTag, fields, callback) ->
   ,
     (fieldKey, callback) ->
       field = fields[fieldKey]
-      tags = parentTag.find(field.selector)
-      tags = tags.eq(field.eq)  if field.eq?
+      
+      if field.selector is 'this'
+        tags = parentTag
+      else
+        tags = parentTag.find(field.selector)
+      
       if field.eq?
         eqNo = field.eq
+        tags = tags.eq(eqNo)
       else
         eqNo = 0
 
@@ -162,6 +167,8 @@ crawlFields = (page, parentTag, fields, callback) ->
               callback null, tag.attr('href')
             when 'class'
               callback null, tag.attr('class')
+            when 'id'
+              callback null, tag.attr('id')
             when 'image'
               callback null, tag.attr('src')
             else

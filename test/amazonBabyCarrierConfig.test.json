@@ -64,6 +64,11 @@
                                 "pageUrl": {
                                   "type": "url"
                                 },
+
+                                "id": {
+                                  "selector": "this",
+                                  "type": "id"
+                                },
                                 
                                 "title": {
                                   "selector": "h4",
