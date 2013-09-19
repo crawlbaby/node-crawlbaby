@@ -94,9 +94,10 @@
                                 "description": {
                                   "selector": ".expander .expander-hidden",
                                   "type": "text",
-                                  "removeText": {
+                                  "replaceText": {
                                     "pattern": "[\\n]",
-                                    "flags": "g"
+                                    "flags": "g",
+                                    "replace": " "
                                   }
                                 }
                               }

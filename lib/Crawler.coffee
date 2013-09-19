@@ -165,6 +165,9 @@ crawlFields = (page, parentTag, fields, callback) ->
               if field.removeText?
                 re = new RegExp field.removeText.pattern, field.removeText.flags
                 text = text.replace re, ''
+              if field.replaceText?
+                re = new RegExp field.replaceText.pattern, field.replaceText.flags
+                text = text.replace re, field.replaceText.replaceString
               callback null, text
             when 'link'
               callback null, tag.attr('href')
