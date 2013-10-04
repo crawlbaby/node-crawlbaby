@@ -64,7 +64,7 @@ class Crawler
 
 
 
-crawlNextPage = (page, parentTag, fields, nextPageSelector, eqNo, resultsMap, callback) ->
+crawlNextPage = (page, parentTag, fields, nextPageSelector, eq, resultsMap, callback) ->
   crawlFields page, parentTag, fields, (err, results) ->
     return callback err  if err?
 
@@ -74,6 +74,13 @@ crawlNextPage = (page, parentTag, fields, nextPageSelector, eqNo, resultsMap, ca
       if v?
         for item in v
           resultsMap[k].push item
+
+    if typeof eq is 'number'
+      eqNo = eq
+    else if eq is 'first'
+      eqNo = 0
+    else if eq is 'last'
+      eqNo = parentTag.find(nextPageSelector).length
 
     nextPageTags = parentTag.find(nextPageSelector).eq(eqNo)
     return callback null, resultsMap  if not nextPageTags? or nextPageTags.length is 0
@@ -98,7 +105,7 @@ crawlNextPage = (page, parentTag, fields, nextPageSelector, eqNo, resultsMap, ca
 
     nextPage.loadUrl nextPageUrl, (err) ->
       return callback err  if err?
-      crawlNextPage nextPage, nextPage.$.root(), fields, nextPageSelector, eqNo, resultsMap, callback
+      crawlNextPage nextPage, nextPage.$.root(), fields, nextPageSelector, eq, resultsMap, callback
 
 
 
@@ -115,8 +122,15 @@ crawlFields = (page, parentTag, fields, callback) ->
       else
         tags = parentTag.find(field.selector)
       
-      if field.eq?
-        eqNo = field.eq
+      eq = field.eq
+      if eq?
+        if typeof eq is 'number'
+          eqNo = eq
+        else if eq is 'first'
+          eqNo = 0
+        else if eq is 'last'
+          eqNo = tags.length
+        
         tags = tags.eq(eqNo)
       else
         eqNo = 0
@@ -127,7 +141,7 @@ crawlFields = (page, parentTag, fields, callback) ->
       if not tags? or tags.length is 0
         switch field.type
           when 'nextPage'
-            return crawlNextPage page, parentTag, field.fields, field.selector, eqNo, {}, callback
+            return crawlNextPage page, parentTag, field.fields, field.selector, eq, {}, callback
           when 'url'
             return callback null, page.url
           else
@@ -140,7 +154,7 @@ crawlFields = (page, parentTag, fields, callback) ->
 
           switch field.type
             when 'nextPage'
-              crawlNextPage page, parentTag, field.fields, field.selector, eqNo, {}, callback
+              crawlNextPage page, parentTag, field.fields, field.selector, eq, {}, callback
 
             when 'page'
               return callback null, null  if not tag.attr('href')?
@@ -161,6 +175,8 @@ crawlFields = (page, parentTag, fields, callback) ->
             when 'tag'
               crawlFields page, tag, field.fields, callback
             when 'text'
+              tag.find('br').replaceWith('\r\n')
+
               text = tag.text()
               if field.removeText?
                 re = new RegExp field.removeText.pattern, field.removeText.flags
@@ -168,6 +184,7 @@ crawlFields = (page, parentTag, fields, callback) ->
               if field.replaceText?
                 re = new RegExp field.replaceText.pattern, field.replaceText.flags
                 text = text.replace re, field.replaceText.replaceString
+              
               callback null, text
             when 'link'
               callback null, tag.attr('href')

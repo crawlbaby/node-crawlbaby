@@ -58,7 +58,7 @@
                       "type": "page",
 
                       "fields": {
-                        "reivewAllPages": {
+                        "reviewAllPages": {
                           "selector": ".next-link a",
                           "type": "nextPage",
 

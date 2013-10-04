@@ -97,7 +97,7 @@
                                   "replaceText": {
                                     "pattern": "[\\n]",
                                     "flags": "g",
-                                    "replace": " "
+                                    "replaceString": " "
                                   }
                                 }
                               }
