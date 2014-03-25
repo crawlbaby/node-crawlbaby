@@ -1,15 +1,15 @@
 {
-  "name": "crawl-baby",
+  "name": "crawlbaby",
   "version": "0.1.0",
   "main": "index",
   "readmeFilename": "README.md",
   "description": "A node.js module to crawl data which only you want from a website.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/xissy/node-crawl-baby.git"
+    "url": "https://github.com/crawlbaby/node-crawlbaby.git"
   },
   "bugs": {
-    "url": "https://github.com/xissy/node-crawl-baby/issues"
+    "url": "https://github.com/crawlbaby/node-crawlbaby/issues"
   },
   "dependencies": {
     "coffee-script": "~1.7.1",
@@ -29,4 +29,5 @@
   "scripts": {
     "test": "mocha --compilers coffee:coffee-script --require coffee-script/register --globals lw --recursive ./test -t 0"
   }
+
 }
