@@ -1,6 +1,6 @@
 {
   "name": "crawl-baby",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "main": "index",
   "readmeFilename": "README.md",
   "description": "A node.js module to crawl data which only you want from a website.",
@@ -12,21 +12,21 @@
     "url": "https://github.com/xissy/node-crawl-baby/issues"
   },
   "dependencies": {
-    "coffee-script": "1.6.3",
-    "async": "0.2.9",
-    "underscore": "1.5.1",
-    "request": "2.26.0",
-    "cheerio": "0.12.1",
-    "node-uuid": "1.4.0"
+    "coffee-script": "~1.7.1",
+    "async": "~0.2.10",
+    "underscore": "~1.5.1",
+    "request": "~2.34.0",
+    "cheerio": "~0.13.1",
+    "node-uuid": "~1.4.0"
   },
   "devDependencies": {
-    "should": "1.2.2",
-    "mocha": "1.12.0"
+    "should": "~3.1.2",
+    "mocha": "~1.17.1"
   },
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script --globals lw --recursive ./test -t 0"
+    "test": "mocha --compilers coffee:coffee-script --require coffee-script/register --globals lw --recursive ./test -t 0"
   }
 }

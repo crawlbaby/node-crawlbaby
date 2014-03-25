@@ -34,7 +34,6 @@ describe 'Page', ->
     it 'should be done', ->
       tags = babyItemReviewsPage.findTags '.reviews article'
       should.exist tags
-      tags.should.not.be.empty
       reviewTags = tags
 
   describe '.findFieldsFromTag(...)', ->

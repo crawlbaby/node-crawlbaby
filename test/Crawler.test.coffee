@@ -7,8 +7,8 @@ fs = require 'fs'
 
 
 describe 'Crawler', ->
-  # config = JSON.parse fs.readFileSync "#{__dirname}/targetConfig.test.json"
-  config = JSON.parse fs.readFileSync "#{__dirname}/amazonBabyCarrierConfig.test.json"
+  config = JSON.parse fs.readFileSync "#{__dirname}/targetConfig.test.json"
+  # config = JSON.parse fs.readFileSync "#{__dirname}/amazonBabyCarrierConfig.test.json"
   crawler = new Crawler config
   
   describe '.crawl(...)', ->
